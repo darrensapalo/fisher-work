@@ -2,6 +2,10 @@
 
 A set of fisher functions, and configuration settings that makes my software development process smoother.
 
+## Requirements
+
+Of course, you need the [Fish Shell](https://fishshell.com/) installed on your machine.
+
 ## Installation
 
 `fisher add github.com/darrensapalo/fisher-work`
