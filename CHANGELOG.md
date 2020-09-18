@@ -6,8 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.1.0] - 2020-09-18
+
+### Added
+
+* Added `git-ignore-fix` fish function, which allows you to fix git ignore when expected files that should be untracked are tracked.
+* Added more details about what the project repository included in the `README.md`.
+
 ## [1.0.0] - 2020-09-16
 
 ### Added
 
-* `work-submit` function, which allows you to push a local branch to a remote branch, under the same name.
+* Added `work-submit` fish function, which allows you to push a local branch to a remote branch, under the same name.
