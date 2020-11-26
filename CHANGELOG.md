@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.2.0] - 2020-11-26
+
+### Added
+
+* Added `cleanup-merged-branches` fish function, which allows you to clean up your git branches which are merged to master.
+
 ## [1.1.0] - 2020-09-18
 
 ### Added
