@@ -8,7 +8,7 @@ Of course, you need the [Fish Shell](https://fishshell.com/) installed on your m
 
 ## Installation
 
-`fisher add github.com/darrensapalo/fisher-work`
+`fisher install github.com/darrensapalo/fisher-work`
 
 This adds the set of functions that I use regularly on the fish shell.
 
