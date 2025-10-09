@@ -11,6 +11,7 @@ function switch-branch
   
   # Step 1: Get branches and format with details
   # Format: branch_name | last_commit_date
+  # Sort by date descending (most recent first)
   set formatted_branches (
     if test "$show_all" = "all"
       git branch --all | grep -v 'HEAD'
@@ -24,10 +25,12 @@ function switch-branch
       if test -n "$branch"
         set commit_date (git log -1 --format=%ci "$branch" 2>/dev/null | cut -d' ' -f1)
         if test -n "$commit_date"
-          printf "%-50s  %s\n" "$branch" "$commit_date"
+          printf "%s  %-50s  %s\n" "$commit_date" "$branch" "$commit_date"
         end
       end
-    end)
+    end | \
+    sort -r | \
+    awk '{printf "%-50s  %s\n", $2, $3}')
   
   # Step 2: Use fzf to select branch with formatted display
   set header_text "Branch                                              Date"
