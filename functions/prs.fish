@@ -42,8 +42,8 @@ function __prs_help
     echo "prs - PR splitting and management tool"
     echo ""
     echo "Commands:"
-    echo "  prs commit [-m <message>] [-c <category>]"
-    echo "      Interactive commit with category"
+    echo "  prs commit [-m <message>] [-c <category>] [--no-interactive]"
+    echo "      Commit with category"
     echo ""
     echo "  prs init [--create|--use-defaults]"
     echo "      Start splitting session"
@@ -502,6 +502,7 @@ function __prs_commit
     
     set -l message ""
     set -l category ""
+    set -l no_interactive 0
     
     set -l i 1
     while test $i -le (count $argv)
@@ -512,6 +513,8 @@ function __prs_commit
             case -c --category
                 set i (math $i + 1)
                 set category $argv[$i]
+            case --no-interactive
+                set no_interactive 1
         end
         set i (math $i + 1)
     end
@@ -541,6 +544,11 @@ function __prs_commit
             set category $categories[1]
             echo "Auto-detected category: $category"
         else if test (count $categories) -gt 1
+            if test $no_interactive -eq 1
+                echo "Error: Multiple categories detected: "(string join ", " $categories)
+                echo "Pass -c/--category when using --no-interactive"
+                return 1
+            end
             echo "Multiple categories detected: "(string join ", " $categories)
             echo "Select category:"
             for i in (seq (count $categories))
@@ -551,6 +559,11 @@ function __prs_commit
                 set category $categories[$choice]
             end
         else
+            if test $no_interactive -eq 1
+                echo "Error: No category detected"
+                echo "Pass -c/--category when using --no-interactive"
+                return 1
+            end
             set category "uncategorized"
             echo "No category detected."
             read -P "Enter category: " category
@@ -558,6 +571,10 @@ function __prs_commit
     end
     
     if test -z "$message"
+        if test $no_interactive -eq 1
+            echo "Error: Commit message is required with --no-interactive"
+            return 1
+        end
         read -P "Commit message: " message
     end
     
@@ -565,10 +582,24 @@ function __prs_commit
     
     echo ""
     echo "Will run: git commit -m \"$full_message\""
+    if test $no_interactive -eq 1
+        git commit -m $full_message
+        set -l commit_status $status
+        if test $commit_status -ne 0
+            return $commit_status
+        end
+        echo ""
+        echo "✓ Committed with category: $category"
+        return 0
+    end
     read -P "Commit? (Y/n): " confirm
     
     if test "$confirm" != "n"
         git commit -m $full_message
+        set -l commit_status $status
+        if test $commit_status -ne 0
+            return $commit_status
+        end
         echo ""
         echo "✓ Committed with category: $category"
     end
